@@ -82,7 +82,7 @@ resource "google_api_gateway_api" "api" {
 resource "google_api_gateway_api_config" "api_cfg" {
   provider      = google-beta
   api           = google_api_gateway_api.api.api_id
-  api_config_id = "ibm-api-hub-config-v4"
+  api_config_id = "ibm-api-hub-config-v5"
 
   openapi_documents {
     document {
