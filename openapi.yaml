@@ -1,0 +1,28 @@
+swagger: '2.0'
+info:
+  title: Secure API Hub Gateway
+  description: API Gateway routing to Cloud Run
+  version: 1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+paths:
+  /analytics:
+    get:
+      summary: Get Analytics
+      operationId: getAnalytics
+      x-google-backend:
+        address: https://ibm-api-hub-backend-qjz6xblygq-lm.a.run.app/analytics
+      responses:
+        '200':
+          description: A successful response
+  /ingest:
+    post:
+      summary: Ingest Data
+      operationId: ingestData
+      x-google-backend:
+        address: https://ibm-api-hub-backend-qjz6xblygq-lm.a.run.app/ingest
+      responses:
+        '200':
+          description: A successful response

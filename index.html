@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBM API Hub Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #4da8da;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #888;
+            margin-bottom: 40px;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+        .card {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border-top: 4px solid #4da8da;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .action-name {
+            font-size: 1.2rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .action-count {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>API Analytics Hub</h1>
+    <div class="subtitle">Live Serverless Telemetry via Google Cloud Platform</div>
+
+    <div class="dashboard" id="data-container">
+        <p style="color: #888;">Fetching secure data from Cloud Run...</p>
+    </div>
+
+    <script>
+        // REPLACE THIS WITH YOUR ACTUAL CLOUD RUN URL (Do not include /docs)
+        const API_URL = "https://ibm-api-hub-gateway-eu-diddfj8g.ew.gateway.dev/analytics";
+
+        async function fetchAnalytics() {
+            try {
+                const response = await fetch(API_URL);
+                const result = await response.json();
+                
+                const container = document.getElementById('data-container');
+                container.innerHTML = ''; // Clear loading text
+
+                result.data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="action-name">${item.action}</div>
+                        <div class="action-count">${item.count}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                document.getElementById('data-container').innerHTML = 
+                    '<p style="color: #ff5555;">Failed to connect to the API. Check the console.</p>';
+            }
+        }
+
+        // Run the function when the page loads
+        fetchAnalytics();
+    </script>
+</body>
+</html>
