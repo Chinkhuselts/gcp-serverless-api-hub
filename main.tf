@@ -32,6 +32,7 @@ provider "google-beta" {
 # 1. Provision a BigQuery Dataset for Analytics
 resource "google_bigquery_dataset" "analytics_dataset" {
   dataset_id    = "api_analytics"
+  project       = "ibm-api-hub-4002"
   friendly_name = "API Analytics Dataset"
   description   = "Stores aggregated data from the API Hub"
   location      = "EU"
