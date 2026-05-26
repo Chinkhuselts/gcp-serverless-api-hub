@@ -29,8 +29,8 @@ jobs:
 
     # 4. Initialize Terraform
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -reconfigure
 
     # 5. Apply the changes automatically!
     - name: Terraform Apply
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -refresh=true
