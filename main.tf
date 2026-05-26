@@ -1,4 +1,8 @@
 terraform {
+  backend "gcs" {
+    bucket  = "ibm-api-hub-tf-state-4002"
+    prefix  = "terraform/state"
+  }
   required_providers {
     google = {
       source  = "hashicorp/google"
