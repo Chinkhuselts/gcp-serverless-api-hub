@@ -7,26 +7,35 @@ on:
 
 jobs:
   terraform:
-    name: 'Terraform Deploy'
+    name: Terraform Deploy
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
 
-    - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v2
-      with:
-        credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+      # 1. Checkout repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    - name: Export GOOGLE_APPLICATION_CREDENTIALS
-      run: echo "${{ secrets.GCP_CREDENTIALS }}" > $HOME/gcloud.json && \
-           echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json" >> $GITHUB_ENV
+      # 2. Authenticate to Google Cloud
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
+      # 3. Install Google Cloud SDK (optional but recommended)
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
 
-    - name: Terraform Init
-      run: terraform init
+      # 4. Install Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
 
-    - name: Terraform Apply
-      run: terraform apply -auto-approve -refresh=true
+      # 5. Terraform Init
+      - name: Terraform Init
+        run: terraform init -reconfigure
+
+      # 6. Terraform Apply
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -refresh=true
