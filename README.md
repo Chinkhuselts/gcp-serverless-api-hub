@@ -3,7 +3,7 @@
 A secure, serverless telemetry and analytics API built on Google Cloud Platform (GCP). The infrastructure is defined entirely as code (IaC) using Terraform and deployed across European regions for high availability.
 
 ## 🏗️ Architecture
-
+![architecture](architecture.png)
 This project implements a decoupled, event-driven architecture using the following Google Cloud services:
 
 *   **Google API Gateway (`europe-west1`):** Acts as the secure front door, routing requests defined via an OpenAPI specification and locking out unauthorized public internet traffic.
