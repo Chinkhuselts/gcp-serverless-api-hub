@@ -32,7 +32,7 @@ provider "google-beta" {
 # 1. Provision a BigQuery Dataset for Analytics
 resource "google_bigquery_dataset" "analytics_dataset" {
   dataset_id    = "api_analytics"
-  project       = "ibm-api-hub-4002"
+  project       = "ibm-api-hub-4002"  # <-- Explicit project ID to prevent 403 Access Denied
   friendly_name = "API Analytics Dataset"
   description   = "Stores aggregated data from the API Hub"
   location      = "EU"
@@ -81,9 +81,11 @@ resource "google_api_gateway_api" "api" {
 
 # 6. Upload your openapi.yaml configuration
 resource "google_api_gateway_api_config" "api_cfg" {
-  provider      = google-beta
-  api           = google_api_gateway_api.api.api_id
-  api_config_id = "ibm-api-hub-config-v5"
+  provider             = google-beta
+  api                  = google_api_gateway_api.api.api_id
+  
+  # Use prefix instead of hardcoded ID for zero-downtime updates
+  api_config_id_prefix = "ibm-api-hub-cfg-"
 
   openapi_documents {
     document {
@@ -97,6 +99,11 @@ resource "google_api_gateway_api_config" "api_cfg" {
       google_service_account = google_service_account.gateway_sa.email
     }
   }
+
+  # Magic block to prevent the Error 9 Immutable Loop
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # 7. Deploy the physical Gateway to Belgium
@@ -105,4 +112,9 @@ resource "google_api_gateway_gateway" "api_gw" {
   gateway_id = "ibm-api-hub-gateway-eu"
   api_config = google_api_gateway_api_config.api_cfg.id
   region     = "europe-west1"
+
+  # Magic block to prevent the Error 9 Immutable Loop
+  lifecycle {
+    create_before_destroy = true
+  }
 }
