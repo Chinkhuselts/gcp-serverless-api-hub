@@ -51,7 +51,7 @@ To run the backend locally for development:
     docker run -p 8000:8000 api-hub-local
     ```
 3.  Open `index.html` in your browser to view the frontend dashboard.
-
+![Dashboard](dashboard.png)
 ## ⚙️ CI/CD
 
 Automated deployments are handled via GitHub Actions. The workflow defined in `.github/workflows/deploy.yml` will automatically initialize and apply Terraform configurations upon pushes to the main branch.
